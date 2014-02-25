@@ -19,6 +19,7 @@ from pyproct.clustering.clustering import Clustering
 from pyproct.tools import visualizationTools
 from pyproct.driver.postprocessing.clusters import save_representatives,\
     save_all_clusters
+from pyproct.driver.postprocessing.confSpaceComparison import conformational_space_comparison
 
 class Driver(Observable):
 
@@ -227,6 +228,11 @@ class Driver(Observable):
                                         "path":os.path.abspath(compressed_file_path),
                                         "type":"pdb"})
             self.timer.stop("Compression")
+
+        if "conformational_space_comparison" in parameters["postprocess"]:
+            conformational_space_comparison(best_clustering["clustering"], self.matrixHandler, self.trajectoryHandler,
+                                            parameters["clustering"], parameters["postprocess"]["conformational_space_comparison"],
+                                            self.observer)
 
     def perform_actions(self, parameters):
         best_clustering, clustering_results = self.get_best_clustering(parameters)

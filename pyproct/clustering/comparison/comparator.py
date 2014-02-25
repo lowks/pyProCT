@@ -7,6 +7,7 @@ import numpy
 from pyproct.clustering.cluster import Cluster
 from pyproct.clustering.metrics.common import get_distances_of_elements_to
 
+
 def calculate_mean_center_differences(decomposed_cluster, matrix):
     """
     Given a mixed decomposed cluster, it calculates the mean of all center differences (giving a qualitative
@@ -186,7 +187,7 @@ class Analyzer(object):
                 if cluster_type == "mixed":
                     analysis[cluster_id]["centers_mean_diff"] = calculate_mean_center_differences(decomposed_cluster, matrix)
                     for traj_id in decomposed_cluster:
-                        analysis[cluster_id][traj_id] = {}
-                        analysis[cluster_id][traj_id]["mean"], analysis[cluster_id][traj_id]["std"], analysis[cluster_id][traj_id]["max"] = calculate_distance_stats(decomposed_cluster[traj_id], matrix)
-                        analysis[cluster_id][traj_id]["num_elements"] = len(decomposed_cluster[traj_id])
+                        analysis[cluster_id]["global"][traj_id] = {}
+                        analysis[cluster_id]["global"][traj_id]["mean"], analysis[cluster_id]["global"][traj_id]["std"], analysis[cluster_id]["global"][traj_id]["max"] = calculate_distance_stats(decomposed_cluster[traj_id], matrix)
+                        analysis[cluster_id]["global"][traj_id]["num_elements"] = len(decomposed_cluster[traj_id])
 
