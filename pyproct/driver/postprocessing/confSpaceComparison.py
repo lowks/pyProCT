@@ -26,7 +26,6 @@ def conformational_space_comparison(clustering, matrixHandler, trajectoryHandler
 
     decomposed_clusters = Separator.separate(clustering.clusters, traj_ranges)
 
-    print "analyzing"
     analysis = Analyzer.run(decomposed_clusters, matrixHandler.distance_matrix)
 
     print analysis

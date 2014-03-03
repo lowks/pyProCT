@@ -51,7 +51,6 @@ class OverlapCalculator():
         """
 
         """
-        print "DECOMPOSED_CLUSTER", decomposed_cluster
         allIds = decomposed_cluster.keys()
         min_distances = []
         max_distances = []

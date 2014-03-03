@@ -7,7 +7,6 @@ import numpy
 from pyproct.clustering.comparison.overlapCalculator import OverlapCalculator
 from pyproct.clustering.comparison.tools import mergeSeparatedClusters,\
     getAllElements, calculate_mean_center_differences, calculate_distance_stats
-
 import sys
 
 class Separator(object):
@@ -113,7 +112,7 @@ class Analyzer(object):
         analysis["total_num_elements"] = 0
         analysis["total_num_clusters"] = 0
 
-        self.analyze_clustering(decomposed_clusters, analysis, matrix)
+        self.analyze_clustering(decomposed_clusters, matrix, analysis)
 
         self.analyze_clusters(decomposed_clusters, matrix, analysis)
 
