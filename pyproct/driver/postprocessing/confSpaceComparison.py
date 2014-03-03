@@ -16,16 +16,17 @@ def conformational_space_comparison(clustering, matrixHandler, trajectoryHandler
 #                          refinement_parameters,
 #                          observer).run(clustering)
 
+    # TODO: ->to function! and test
     traj_ranges = {}
     current = 0
     for i, pdb in enumerate(trajectoryHandler.pdbs):
         traj_ranges["traj_%d"%i] = (current, current + pdb["conformations"] -1)
         current = current + pdb["conformations"]
 
-    print traj_ranges
 
     decomposed_clusters = Separator.separate(clustering.clusters, traj_ranges)
 
+    print "analyzing"
     analysis = Analyzer.run(decomposed_clusters, matrixHandler.distance_matrix)
 
     print analysis

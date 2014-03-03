@@ -1,16 +1,20 @@
 '''
-Created on 12/06/2012
+Created on 03/03/2014
 
 @author: victor
 '''
 import unittest
+from pyproct.clustering.comparison.tools import getAllElements,\
+    mergeSeparatedClusters, calculate_mean_center_differences,\
+    calculate_distance_stats
 import numpy
 from pyRMSD.condensedMatrix import CondensedMatrix
 import scipy.spatial.distance
-from pyproct.clustering.comparison.comparator import calculate_mean_center_differences,\
-    calculate_distance_stats
+
 
 class Test(unittest.TestCase):
+
+
     @classmethod
     def setUpClass(cls):
         cls.decomposed_cluster = {
@@ -43,9 +47,56 @@ class Test(unittest.TestCase):
         expected_radius = numpy.max(distances)
         self.assertItemsEqual((expected_mean,expected_std,expected_radius),(calc_mean, calc_std, calc_radius))
 
+    def test_getAllElements(self):
+        numpy.testing.assert_array_equal( sorted(getAllElements(self.decomposed_cluster)), range(15))
 
+    def test_mergeSeparatedClusters(self):
+        separated_decomposed_clusters = {
+            'mixed': {
+                      '1': {
+                            'traj_A': [3],
+                            'traj_B': [8, 10]
+                            },
+                      '2': {
+                            'traj_A': [4],
+                            'traj_B': [14, 15]
+                            }
+                      },
+            'pure': {
+                     '0': {
+                           'traj_A': [0, 1, 2]
+                           },
+                     '3': {
+                           'traj_A': [5, 6]
+                           },
+                     '4': {
+                           'traj_B': [9, 11, 12, 13, 7]
+                           }
+                     }
+        }
+
+        expected = [{
+                        'traj_A': [3],
+                        'traj_B': [8, 10]
+                    },
+                   {
+                        'traj_A': [4],
+                        'traj_B': [14, 15]
+                    },
+                    {
+                       'traj_A': [0, 1, 2]
+                    },
+                    {
+                       'traj_A': [5, 6]
+                    },
+                    {
+                       'traj_B': [9, 11, 12, 13, 7]
+                    }
+                  ]
+
+        self.assertItemsEqual(expected, mergeSeparatedClusters(separated_decomposed_clusters))
 
 
 if __name__ == "__main__":
-    #import sys;sys.argv = ['', 'Test.test_Name']
+    #import sys;sys.argv = ['', 'Test.testName']
     unittest.main()
