@@ -72,7 +72,7 @@ if __name__ == '__main__':
     traj_file = []
     files=os.listdir(options.directory)
     for filename in files:
-        if options.traj_prefix in filename:
+        if options.traj_prefix == filename[0:len(options.traj_prefix)]:
             traj_file.append(os.path.join(options.directory,filename))
     traj_file.sort()
 
