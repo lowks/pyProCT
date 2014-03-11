@@ -34,11 +34,22 @@ def count_lines_starting_with(file_path, word):
     file_handler.close()
     return counter
 
+def there_is_at_least_one_atom(pdb_file):
+    file_handler = open(pdb_file,"r")
+    for line in file_handler:
+        if "ATOM" == line[0:4]:
+            file_handler.close()
+            return True
+    file_handler.close()
+    return False
+
 def get_number_of_complete_models(pdb_file):
-    return count_lines_starting_with(pdb_file, "ENDMDL")
+    number_of_endmodels = count_lines_starting_with(pdb_file, "ENDMDL")
+    return number_of_endmodels
 
 def get_number_of_frames(pdb_file):
-    return count_lines_starting_with(pdb_file, "MODEL")
+    number_of_models = count_lines_starting_with(pdb_file, "MODEL")
+    return number_of_models
 
 if __name__ == '__main__':
 
