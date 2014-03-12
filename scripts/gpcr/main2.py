@@ -20,34 +20,34 @@ CLUSTERING_TO_5_SCRIPT = "script_cluster_to_5.json"
 TOTALE_SPAWN_WORKSPACE = "clustering_totale_spawn"
 
 data = [
-#     {
-#         'dir':'1ewk',
-#         'plots': {
-#              "totale_spawning":["L1(32.5-5.933.7)", "TOTALE"],
-#              "binding_spawning":["L1(32.5-5.933.7)", "L1BindingEne"]
-#          }
-#     },
-#     {
-#         'dir':'3p0g',
-#         'plots': {
-#              "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
-#              "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
-#          }
-#     },
-#     {
-#         'dir':'3oe9',
-#         'plots': {
-#              "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
-#              "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
-#          }
-#     },
-#     {
-#         'dir':'4gpo',
-#         'plots': {
-#              "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
-#              "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
-#          }
-#     },
+    {
+        'dir':'1ewk',
+        'plots': {
+             "totale_spawning":["L1(32.5-5.933.7)", "TOTALE"],
+             "binding_spawning":["L1(32.5-5.933.7)", "L1BindingEne"]
+         }
+    },
+    {
+        'dir':'3p0g',
+        'plots': {
+             "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
+             "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
+         }
+    },
+    {
+        'dir':'3oe9',
+        'plots': {
+             "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
+             "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
+         }
+    },
+    {
+        'dir':'4gpo',
+        'plots': {
+             "totale_spawning":["L1(63.416.011.9)", "TOTALE"],
+             "binding_spawning":["L1(63.416.011.9)", "L1BindingEne"]
+         }
+    },
     {
         'dir':'4k5y',
         'plots': {
@@ -115,9 +115,9 @@ for datum in data:
     be_rmsd_clustering_script_path = os.path.join(base_dir, 'scripts', CLUSTERING_SPAWN_TOTE_SCRIPT)
     working_directory = os.path.join(base_dir, TOTALE_SPAWN_WORKSPACE)
     params = load_dic_in_json(be_rmsd_clustering_script_path)
-    params['global']['pdbs'] = [os.path.join(os.getcwd(), traj_pdb)]
-    params['workspace']['base'] = working_directory
-    params['matrix']['parameters']['path'] = matrix_file
+    params['data']['files'] = [os.path.join(os.getcwd(), traj_pdb)]
+    params['global']['workspace']['base'] = working_directory
+    params['data']['matrix']['parameters']['path'] = matrix_file
     save_dic_in_json(params, be_rmsd_clustering_script_path)
     use_pyproct(working_directory, be_rmsd_clustering_script_path)
 
@@ -168,10 +168,10 @@ for datum in data:
     working_directory = os.path.join(base_dir, "cluster_to_5")
     cluster_to_5_script_path = os.path.join(base_dir, 'scripts', CLUSTERING_TO_5_SCRIPT)
     params = load_dic_in_json(cluster_to_5_script_path)
-    params['global']['pdbs'] = [most_negative_path]
-    params['workspace']['base'] = working_directory
-    params['matrix']['parameters']['dist_fit_selection'] = "name CA"
-    params['matrix']['parameters']['body_selection'] = ligand_description
+    params['data']['files'] = [most_negative_path]
+    params['global']['workspace']['base'] = working_directory
+    params['data']['matrix']['parameters']['dist_fit_selection'] = "name CA"
+    params['data']['matrix']['parameters']['body_selection'] = ligand_description
     save_dic_in_json(params, cluster_to_5_script_path)
     use_pyproct(working_directory, cluster_to_5_script_path)
 
@@ -180,8 +180,6 @@ for datum in data:
     #######################################################################################################################
     print "* Copying representatives to base_dir."
     shutil.copyfile(os.path.join(working_directory, "results", "representatives.pdb"), os.path.join(base_dir, "5_confs_method_1.pdb" ))
-
-
 
     #####################################################################
     #####################################################################

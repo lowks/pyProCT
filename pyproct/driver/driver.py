@@ -66,10 +66,10 @@ class Driver(Observable):
             self.timer.stop("Matrix Imaging")
 
     def get_best_clustering(self, parameters):
-        best_clustering = None
         ##############################
         # Do the actual clustering
         ##############################
+        best_clustering = None
         clustering_results = None
 
         ##############################
@@ -128,7 +128,6 @@ class Driver(Observable):
         ##############################
         # Specialized post-processing
         ##############################
-
         if not "postprocess" in parameters:
             return
 
