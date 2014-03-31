@@ -229,9 +229,22 @@ class Driver(Observable):
             self.timer.stop("Compression")
 
         if "conformational_space_comparison" in parameters["postprocess"]:
-            conformational_space_comparison(best_clustering["clustering"], self.matrixHandler, self.trajectoryHandler,
-                                            parameters["clustering"], parameters["postprocess"]["conformational_space_comparison"],
-                                            self.observer)
+            analysis = conformational_space_comparison(best_clustering["clustering"], self.matrixHandler, self.trajectoryHandler,
+                                             parameters["clustering"], parameters["postprocess"]["conformational_space_comparison"],
+                                             self.observer)
+
+            displacements_path = os.path.join(self.workspaceHandler["results"], "conf_space_comp.json")
+
+            self.generatedFiles.append({
+                                             "description":"Comparison of the conformational space",
+                                             "path":os.path.abspath(displacements_path),
+                                             "type":"text"
+            })
+
+            open(displacements_path,"w").write(json.dumps(analysis,
+                                      sort_keys=False,
+                                      indent=4,
+                                      separators=(',', ': ')))
 
     def perform_actions(self, parameters):
         best_clustering, clustering_results = self.get_best_clustering(parameters)

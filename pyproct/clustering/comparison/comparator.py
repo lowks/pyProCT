@@ -135,14 +135,16 @@ class Analyzer(object):
         for cluster_type in separated_decomposed_clusters:
             for cluster_id in separated_decomposed_clusters[cluster_type]:
                 decomposed_cluster = separated_decomposed_clusters[cluster_type][cluster_id]
-                analysis[cluster_id] = {"global":{}}
+                analysis[cluster_id] = {"components":decomposed_cluster.keys(),"global":{}}
                 analysis[cluster_id]["global"]["mean"], analysis[cluster_id]["global"]["std"], analysis[cluster_id]["global"]["max"] = calculate_distance_stats(getAllElements(decomposed_cluster), distance_matrix)
                 analysis[cluster_id]["global"]["num_elements"] = len(getAllElements(decomposed_cluster))
+
+                for traj_id in decomposed_cluster:
+                    analysis[cluster_id]["global"][traj_id] = {}
+                    analysis[cluster_id]["global"][traj_id]["mean"], analysis[cluster_id]["global"][traj_id]["std"], analysis[cluster_id]["global"][traj_id]["max"] = calculate_distance_stats(decomposed_cluster[traj_id], distance_matrix)
+                    analysis[cluster_id]["global"][traj_id]["num_elements"] = len(decomposed_cluster[traj_id])
+
                 if cluster_type == "mixed":
                     analysis[cluster_id]["centers_mean_diff"] = calculate_mean_center_differences(decomposed_cluster, distance_matrix)
                     analysis[cluster_id]["global"]["overlap"] = OverlapCalculator.calculate_cluster_overlap(2, decomposed_cluster, distance_matrix)
-                    for traj_id in decomposed_cluster:
-                        analysis[cluster_id]["global"][traj_id] = {}
-                        analysis[cluster_id]["global"][traj_id]["mean"], analysis[cluster_id]["global"][traj_id]["std"], analysis[cluster_id]["global"][traj_id]["max"] = calculate_distance_stats(decomposed_cluster[traj_id], distance_matrix)
-                        analysis[cluster_id]["global"][traj_id]["num_elements"] = len(decomposed_cluster[traj_id])
 
