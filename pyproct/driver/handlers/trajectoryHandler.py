@@ -61,11 +61,22 @@ class TrajectoryHandler(Observable):
 
         @return: The aforementioned dictionary.
         """
-        return {
-                  "source":pdb,
-                  "conformations": pdb_tools.get_number_of_frames(pdb),
-                  "atoms":  pdb_tools.get_number_of_atoms(pdb)
-        }
+        if isinstance(pdb, basestring):
+            # A string with the path
+            return {
+                      "source":pdb,
+                      "base_selection": None,
+                      "conformations": pdb_tools.get_number_of_frames(pdb),
+                      "atoms":  pdb_tools.get_number_of_atoms(pdb)
+            }
+        else:
+            # {"file":  , "selection":  } object
+            return {
+                      "source":pdb["file"],
+                      "base_selection": pdb["base_selection"],
+                      "conformations": pdb_tools.get_number_of_frames(pdb["file"]),
+                      "atoms":  pdb_tools.get_number_of_atoms(pdb["file"])
+            }
 
     def getJoinedPDB(self):
         """
@@ -78,12 +89,23 @@ class TrajectoryHandler(Observable):
         if self.bookmarking["pdb"] is None:
             try:
                 for pdb_data in self.pdbs:
-                    pdb = prody.parsePDB(pdb_data["source"])
-                    if merged_pdb is None:
-                        merged_pdb = pdb
+                    if pdb_data["base_selection"] is None:
+                        pdb = prody.parsePDB(pdb_data["source"])
+                        if merged_pdb is None:
+                            merged_pdb = pdb
+                        else:
+                            for coordset in pdb.getCoordsets():
+                                merged_pdb.addCoordset(coordset)
                     else:
-                        for coordset in pdb.getCoordsets():
-                            merged_pdb.addCoordset(coordset)
+                        # Then it must be a dict with {"file":  , "selection":  }
+                        pdb = prody.parsePDB(pdb_data["source"])
+                        selection = pdb.select(pdb_data["base_selection"])
+                        if merged_pdb is None:
+                            merged_pdb = selection.copy() # creates the atom set
+                        else:
+                            for coordset in selection.getCoordsets():
+                                merged_pdb.addCoordset(coordset)
+
                 self.bookmarking["pdb"] = merged_pdb
             except Exception, e:
                 print "[ERROR TrajectroyHandler::getJoinedPDB] fatal error reading pdbs.\nError: %s\n Program will halt now ..."%e.message
